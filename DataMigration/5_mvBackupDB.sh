@@ -5,7 +5,7 @@ echo $curPath
 if [[ "${curPath}" == "/opt/splunk/var/lib/splunk" ]]; then
 	for f in */colddb; do
         	if [ -d "${f}" ]; then
-	                #mv $f $f.OLD
+	                mv $f $f.OLD
                 	echo "${f}"
         	fi
 	done
