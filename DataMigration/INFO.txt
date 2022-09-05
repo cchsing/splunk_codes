@@ -1,0 +1,2 @@
+Some information or note:
+1. dos2unix is used to change the file from windows file to unix format. Newline is different for Windows and causes error for the bash to run. 
