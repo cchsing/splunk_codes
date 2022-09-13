@@ -2,7 +2,11 @@ from __future__ import print_function
 
 from configs import HeadersPars, getAlerts
 
-import sys, requests, json, time
+import sys
+import requests
+import json
+import time
+
 
 def main():
     # define api endpoint
@@ -19,13 +23,15 @@ def main():
     # print (reqData)
 
     # http post request
-    try: 
+    try:
         # DATA = requests.get(API_ENDPOINT)
         DATA = requests.post(API_ENDPOINT, headers=REQHEADER, json=REQDATA)
         DATA_DICT = json.loads(DATA.text)
         sys.stdout.write(json.dumps(DATA_DICT, indent=3))
     except:
-        sys.stderr.write("POST Request to getAlerts endpoint error. ")
-        
+        sys.stderr.write(" %s Request to %s endpoint error." % (
+            getAlerts['Method'], getAlerts['rscPath']))
+
+
 if __name__ == "__main__":
     main()
