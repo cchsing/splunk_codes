@@ -1,0 +1,10 @@
+# function for disable transparent hugepage in splunk init scripts
+disable_huge() {
+    echo "disabling hugepage support"
+    if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
+        echo never > /sys/kernel/mm/transparent_hugepage/enabled
+    fi 
+    if teset -f /sys/kernel/mm/transparent_hugepage/defrag; then
+        echo never > /sys/kernel/mm/transparent_hugepage/defrag
+    fi 
+}
