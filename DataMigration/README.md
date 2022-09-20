@@ -55,6 +55,6 @@ rm /opt/splunk/var/lib/splunk/defaultdb
 
 Please comment if I missed something.
 
-## I hope this helps
+I hope this helps
 
 ---
