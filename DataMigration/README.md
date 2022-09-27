@@ -1,6 +1,7 @@
 # Data Migration (rsync) - Some information or note:
 
 1. dos2unix is used to change the file from windows file to unix format. Newline is different for Windows and causes error for the bash to run.
+2. URL: https://community.splunk.com/t5/Deployment-Architecture/How-to-move-index-from-one-hard-drive-to-another-in-Splunk/m-p/170733
 
 ## From the forum -----------------------------
 

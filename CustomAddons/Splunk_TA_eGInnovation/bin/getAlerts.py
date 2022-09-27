@@ -27,7 +27,7 @@ def main():
         # DATA = requests.get(API_ENDPOINT)
         DATA = requests.post(API_ENDPOINT, headers=REQHEADER, json=REQDATA)
         DATA_DICT = json.loads(DATA.text)
-        sys.stdout.write(json.dumps(DATA_DICT, indent=3))
+        sys.stdout.write(json.dumps(DATA_DICT, indent=4))
     except:
         sys.stderr.write(" %s Request to %s endpoint error." % (
             getAlerts['Method'], getAlerts['rscPath']))

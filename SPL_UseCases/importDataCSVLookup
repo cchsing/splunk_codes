@@ -1,0 +1,11 @@
+| inputlookup <CSV Lookup File>
+| addinfo 
+| eval _time=strptime(Month,"%d-%b-%y"), info_max_time=if(isnum(info_max_time),info_max_time,now()) 
+| where _time>=info_min_time AND _time<info_max_time 
+| fields - info_max_time, info_min_time, info_search_time, info_sid 
+| search NOT [
+    search index=<index>
+    | dedup <fields>
+    | table <fields>
+]
+| collect index=<index> source=<source>
