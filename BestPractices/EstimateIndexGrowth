@@ -1,0 +1,11 @@
+input data to UAT server with standalone Splunk Enterprise
+examine the data ingestion rate on the test index
+
+Variable to consider to allocate disk space
+
+- Daily rate of input
+- Retention period (in days)
+- Compression factor (~50% = 15% raw data + 35% for Splunk indexing)
+- Padding (50 GB)
+
+$Daily rate * Retention Period * Compression Factor + Padding = Total$
