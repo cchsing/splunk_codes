@@ -5,7 +5,6 @@ from configs import HeadersPars, getAlerts
 import sys
 import requests
 import json
-import time
 
 
 def main():

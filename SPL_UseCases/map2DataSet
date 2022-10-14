@@ -1,0 +1,6 @@
+# this is to map a time range obtained from data set A to data set B to extract data / metric for that time range in data set B for tagging
+
+| search index=<index>
+| eval startTime_epoch=strptime(startTime,"%m-%d-%Y"), endTime_epoch=strptime(endTime,"%m-%d-%Y")
+| map search="search index=<index> earliest=$startTime_epoch$ latest=$endTime_epoch$
+| eval tag=<tag>" maxsearches=1000000
