@@ -9,7 +9,7 @@ import json
 
 def main():
     # define api endpoint
-    API_ENDPOINT = HeadersPars['managerurl'] + getAlerts['rscPath']
+    API_ENDPOINT = "https://10.111.33.10:7077" + getAlerts['rscPath']
     # print (API_ENDPOINT)
 
     # header for the request
@@ -24,12 +24,13 @@ def main():
     # http post request
     try:
         # DATA = requests.get(API_ENDPOINT)
-        DATA = requests.post(API_ENDPOINT, headers=REQHEADER, json=REQDATA)
+        DATA = requests.post(
+            url=API_ENDPOINT, headers=REQHEADER, json=REQDATA, verify=False)
         DATA_DICT = json.loads(DATA.text)
         sys.stdout.write(json.dumps(DATA_DICT, indent=4))
-    except:
-        sys.stderr.write(" %s Request to %s endpoint error." % (
-            getAlerts['Method'], getAlerts['rscPath']))
+    except requests.exceptions.RequestException as e:
+        sys.stderr.write(" %s Request to %s endpoint error. HTTP Status Code: %s. Request Exception: %s" % (
+            getAlerts['Method'], getAlerts['rscPath'], DATA.status_code, e))
 
 
 if __name__ == "__main__":

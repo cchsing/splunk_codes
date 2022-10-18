@@ -25,5 +25,7 @@ getAlerts = {
     "Body": {
         "type": "<zone/segment/service/componentType>",
         "name": "<comma-separated list of zone/segment/service/componentType"
-    }
+    },
+    "type": ["zone", "segment", "service", "componentType"],
+    "componentName": ["Oracle Database"]
 }
