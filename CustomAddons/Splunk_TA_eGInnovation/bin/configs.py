@@ -1,5 +1,6 @@
+BaseURL = "https://10.111.33.10:7077"
+
 HeadersPars = {
-    # "managerurl": "https://api.coindesk.com",
     "managerurl": "http://<IP address of the eG console:Port>",
     "user": "eG username or domain",
     "pwd": "Base64 encoded password"
@@ -14,11 +15,11 @@ showtestsdetails = {
         "componentname": "Component name",
         "testtype": "Performance / Configuration",
         "testname": "Test name"
-    }
+    },
+    "testtype": ["Performance", "Configuration"]
 }
 
 getAlerts = {
-    # "rscPath": "/v1/bpi/currentprice.json",
     "rscPath": "/api/eg/analytics/getAlerts",
     "Method": "POST",
     "Content-Type": "application/json",
