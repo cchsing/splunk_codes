@@ -16,7 +16,6 @@ showtestsdetails = {
         "testtype": "Performance / Configuration",
         "testname": "Test name"
     },
-    "testtype": ["Performance", "Configuration"]
 }
 
 getAlerts = {
@@ -30,3 +29,5 @@ getAlerts = {
     "type": ["zone", "segment", "service", "componentType"],
     "componentName": ["Oracle Database"]
 }
+
+componentname = ["Oracle Long Running Queries"]

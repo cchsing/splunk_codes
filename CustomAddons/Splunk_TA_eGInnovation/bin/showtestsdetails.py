@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-from configs import HeadersPars, showtestsdetails
+from configs import HeadersPars, showtestsdetails, componentname
 
 import sys
 import requests
@@ -14,6 +14,7 @@ def main():
     REQHEADER['Content-Type'] = showtestsdetails['Content-Type']
 
     REQDATA = showtestsdetails['Body']
+    REQDATA['Body']['componentname'] = componentname[0]
 
     try:
         DATA = requests.post(API_ENDPOINT, headers=REQHEADER, json=REQDATA)
