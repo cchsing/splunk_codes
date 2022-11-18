@@ -1,0 +1,55 @@
+<form theme="dark" script="filename.js" stylesheet="filename.css">
+    <init></init>
+    <label></label>
+    <description></description>
+    <fieldset submitButton="true" autoRun="true">
+        <input type="time" token="global_time">
+            <label>Time</label>
+            <default>
+                <earliest>-2h@h</earliest>
+                <latest>-30m@m</latest>
+            </default>
+            <change>
+                <eval token="globalEarliest">if(isnum($global_time.earliest$),$global_time.earliest$,relative_time(now(),$global_time.earliest$))</eval>
+                <eval token="globalEarliestFormat">strftime($globalEarliest$, "%Y-%m-%d %H:%M:%S")</eval>
+            </change>
+        </input>
+    </fieldset>
+    <row>
+        <panel>
+            <html>
+                <style>
+                    img {
+                        float: right;
+                    }
+                    .dashboard-panel h2 {
+                        font-size: 200% !important;
+                        font-weight: bold !important;
+                        text-decoration: underline !important;
+                    }
+                </style>
+                <h1>Dashboard Last Updated: $</h1>
+            </html>
+        </panel>
+    </row>
+    <row>
+        <panel>
+            <chart>
+                <search>
+                    <query>
+                        index=_internal 
+                        | timechart count by sourcetype
+                    </query>
+                    <earliest>$global_time.earliest$</earliest>
+                    <latest>$global_time.latest$</latest>
+                    <done>
+                        <eval token="eventCount_lastUpdated">replace($job.latestTime$, "T|\\..+?(\\+08:00)", " ")</eval>
+                    </done>
+                </search>
+                <option name="charting.chart">line</option>
+                <option name="charting.drilldown">none</option>
+                <option name="height">500</option>
+            </chart>
+        </panel>
+    </row>
+</form>
