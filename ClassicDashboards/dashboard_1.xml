@@ -1,4 +1,4 @@
-<form theme="dark" script="filename.js" stylesheet="filename.css">
+<form theme="dark" script="dashboard_1_script.js" stylesheet="dashboard_1_style.css">
     <init></init>
     <label></label>
     <description></description>

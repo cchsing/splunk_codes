@@ -1,0 +1,17 @@
+.grid_container_1 {
+    display: grid;
+    /* grid-template-columns: repeat(3, minmax(200px, 1fr)); */
+    grid-template-columns: repeat(3, 1fr);
+    background-color: #2196F3;
+    padding: 10px
+}
+.grid_item_1 {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+}
+.grid_item_1.animation_1:hover {
+    visibility: hidden;
+}
