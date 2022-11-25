@@ -1,9 +1,19 @@
 # Classic Dashboards Use Cases
 
-### how to handle the date time format for in panel search or query
-
 ---
 
-\<done> <br>
-&nbsp;&nbsp;&nbsp;&nbsp;\<eval token="token_latestTime">replace(\$job.latestTime\$,"T|\\..+?(\\+08:00)", " ")\</eval> <br>
-\</done>
+### Splunk Classic Dashboard XML
+
+1. [Dashboard 1 XML](./dashboard_1.xml)
+
+### Splunk Dashboard CSS
+
+1. [Dashboard 1 CSS](./dashboard_1_style.css)
+
+### Splunk Dashboard Javascript
+
+1. [Dashboard 1 JS](./dashboard_1_script.js)
+
+### Splunk Dashboard Javascript Standard Template
+
+1. [Template 1](./template1.js)
