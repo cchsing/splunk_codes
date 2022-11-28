@@ -34,10 +34,10 @@ require([
             if (var_1 == 0) {
                 var_1 = 1;
                 $("#img1").attr("src","/static/app/test_app_splunk/1F600.svg");
-                console.log(search_1.data('results'));
-                console.log(myResults.data().rows[myResults.data().rows.length - 1]);
-                console.log(myResults.data().rows[myResults.data().rows.length - 1][1]);
-                console.log("The value holder: ", var_2);
+                // console.log(search_1.data('results'));
+                // console.log(myResults.data().rows[myResults.data().rows.length - 1]);
+                // console.log(myResults.data().rows[myResults.data().rows.length - 1][1]);
+                // console.log("The value holder: ", var_2);
             } else {
                 var_1 = 0;
                 $("#img1").attr("src","/static/app/test_app_splunk/1F621.svg");
