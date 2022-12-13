@@ -1,0 +1,10 @@
+# Combine 2 or more multivalue fields - Used in Disk Utilisation Extraction
+
+| index=<index> services=<service>
+| rex field=<metric_data> "(?<partition>.+?)=(?<used_mb>.+?)MB;.+?;.+?;(?<total_mb>.+\s)"
+| eval fields1=mvzip(used_mb,total_mb), fields2=mvzip(partition,fields1)
+| table \_time, \_raw, hostname, fields1, fields2
+| mvexpand fields2
+| rex field=fields2 "(?<partition>.+?),(?<used_mb>.+?),(?<total_mb>.+)"
+| table \_time, hostname, partition, used_mb, total_mb
+| eval used_percent = round(used_mb/total_mb\*100)
