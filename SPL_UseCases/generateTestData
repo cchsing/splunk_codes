@@ -1,0 +1,6 @@
+# To generate test data on scheduled interval
+
+| makeresults count=2
+| streamstats count
+| eval high=100, low=0, cpu_used_pct=round(((random() % high) / high) * (high - low) + low, 1), hostname=case(count=1, "splunk.jc.test1", count=2, "splunk.jc.test2")
+| fields - high, low, count
