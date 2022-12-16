@@ -1,0 +1,45 @@
+<!--Copyright (C) 2005-2022 Splunk Inc. All Rights Reserved.-->
+<nav color="#474444">
+	<view name="suite_redirect" default="true"/>
+	<collection label="Service Analyzer">
+		<view name="homeview" />
+		<view name="saved_homepage_lister"/>
+	</collection>
+	<view name="entity_overview"/>
+	<view name="alerts_and_episodes"/>
+	<view name="glass_tables_lister"/>
+	<view name="saved_deep_dive_lister"/>
+	<collection label="Dashboards">
+		<view name="predictive_analytics_usage"/>
+		<divider />
+		<view name="event_analytics_monitoring"/>
+		<view name="event_analytics_audit"/>
+		<view name="itsi_healthcheck"/>
+		<view name="itsi_svc_statistics"/>
+		<view name="upgrade_readiness"/>
+		<divider />
+		<view name="dashboards"/>
+		<view name="pivot"/>
+		<view name="reports"/>
+	</collection>
+	<collection label="Configuration">
+		<view name="data_integrations"/>
+		<divider />
+		<view name="services_lister"/>
+		<view name="service_templates_lister"/>
+		<view name="kpi_base_searches_lister"/>
+		<view name="kpi_threshold_templates_lister"/>
+		<view name="entities_lister"/>
+		<divider />
+		<view name="notable_event_aggregation_policies_lister"/>
+		<view name="correlation_searches_lister"/>
+		<view name="alarm_console"/>
+		<view name="hybrid_action_dispatching_config"/>
+		<divider />
+		<view name="teams_lister"/>
+		<view name="custom_threshold_windows_lister"/>
+		<view name="maintenance_windows_lister"/>
+		<view name="backup_restore_lister"/>
+	</collection>
+	<view name="search"/>
+</nav>
