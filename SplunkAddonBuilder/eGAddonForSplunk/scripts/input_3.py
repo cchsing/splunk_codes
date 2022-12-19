@@ -120,13 +120,29 @@ def parseHeaDat(data):
     return hea, dat
 
 
-def format_SplkDat(fields, values):
-    """
+def splkData_format(fields, values):
+    """ Function to format the data into string with the fields and values pair separated by comma. "<field1>=<value1>,<field2>=<value2>,...."
     Parameters
     ----------
+    fields : list
+        The attribute names / field names.
+    values : list
+        The value of the attribute / field.
     Returns
     -------
+    splkData : str
+        string data in format of "<field1>=<value1>,<field2>=<value2>,...."
     """
+    assert len(fields) == len(values), "Fields and Values mismatched."
+    splkData = ""
+
+    for i in range(0, len(fields) - 1, 1):
+        splkData += "\"" + fields[i] + "\"=\"" + values[i] + "\","
+
+    splkData += "\"" + fields[len(fields) - 1] + \
+        "\"=\"" + values[len(fields) - 1] + "\""
+
+    return splkData
 
 
 def collect_events(helper, ew):
@@ -182,7 +198,7 @@ def collect_events(helper, ew):
         response1.raise_for_status()
     # ---------------------------------------------------------------------------------
     # Parse the Hostname and Port provided into List
-    cName_port_list = hostnamePort_parsing(opt_component_name_and_test_port)
+    cName_port_list = parseHostnamePort(opt_component_name_and_test_port)
     # ---------------------------------------------------------------------------------
     # Checkpoint to avoid querying duplicate data
     state, endDate_str = checkpoint(helper, opt_checkpoint_initial_value)
@@ -199,8 +215,14 @@ def collect_events(helper, ew):
                         "startDate": state,
                         "endDate": endDate_str
                     }
-                    # Parse the data and determine whether it's a header
-                    # If it's a header parse as header else as data.
+                    # HTTP Request to retrieve the test data
+    # ---------------------------------------------------------------------------------
+                    response2 = httpReq(helper, url2, method1, body2, header1)
+                    r_status2 = response2.status_code
+                    if r_status2 != 200:
+                        response2.raise_for_status()
+                        break
+    # ---------------------------------------------------------------------------------
                 except Exception as e:
                     message1 = "Exception=" + str(e)
                     message2 = "ExceptionInfo=" + str(sys.exc_info())
