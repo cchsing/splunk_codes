@@ -8,7 +8,22 @@ import re
 import traceback
 
 
-def hostnamePort_parsing(nameList_string):
+def parseHostnamePort(nameList_string):
+    """ Function to parse the string of hostname and port to list 
+    Parameters
+    ----------
+    nameList_string : str
+        A string of hostname and port separated by comma. "<hostname1>:<port1>,<hostname2>:<port2>,..."
+    Returns
+    -------
+    cName_port_list : list
+        A list of list where hostname and port are stored.
+        [
+            [hostname1, port1],
+            [hostname2, port2], ...
+        ]
+    """
+    assert nameList_string is not None, 'Hostname and Port is not provided.'
     cName_list = nameList_string.split(",")
     cName_list = list(dict.fromkeys(cName_list))  # remove duplicate name
     cName_port_list = [None] * len(cName_list)
@@ -18,10 +33,36 @@ def hostnamePort_parsing(nameList_string):
 
 
 def httpReq(helper, URL, Method, Body, Header):
+    """ Function for HTTP Request
+    Parameters
+    ----------
+    helper : Splunk Add-on Builder helper function
+    URL : str
+    Method : str
+    Body : dict
+    Header : dict
+
+    Returns
+    -------
+    HTTP Response Object
+    """
     return helper.send_http_request(URL, Method, parameters=None, payload=Body, headers=Header, cookies=None, verify=False, cert=None, timeout=None, use_proxy=False)
 
 
 def checkpoint(helper, initialValue):
+    """ Function for creating Checkpoint using the start and end datetime %Y-%m-%d %H:%M:%S
+    Parameters
+    ----------
+    helper : Splunk Add-on Builder helper function
+    initialValue : str
+        The initial value for the checkpoint on the first run with empty checkpoint. Uses format "%Y-%m-%d %H:%M:%S"
+    Returns
+    -------
+    state : str
+        The start time or the previous checkpoint stored.
+    endDate_str : str
+        The end time or the new checkpoint updated. 
+    """
     # CHECKPOINTING
     key = "startDate"
     endDate = datetime.datetime.now()
@@ -34,6 +75,58 @@ def checkpoint(helper, initialValue):
     helper.save_check_point(key, endDate_str)
     # helper.delete_check_point(key)
     return state, endDate_str
+
+
+def isHeader(data):
+    """ Function to check the first 4 characters of the data and determine the type of data (header or metrics)
+    Parameters
+    ----------
+    data : str
+        The data obtained from the REST API. Analyse for header or metrics data.
+    Returns
+    -------
+    bool
+        True - data is a header, False - data is metrics data. 
+    """
+    pattern = "^(TRGT)"
+    return bool(re.match(pattern, data))
+
+
+def parseHeaDat(data):
+    """ Function to parse the data and return the header and metrics data. 
+    Parameters
+    ----------
+    data : str
+        The data obtained from the REST API.
+    Returns
+    -------
+    hea : list
+        The header of the data which is the attribute name or field name. 
+    dat : list
+        The body of the data which holds the corresponding value for the header.  
+    """
+    assert data is not None, "There is no data to parse. "
+    hea = dat = []
+    if isHeader(data):
+        hea = data.split()
+    else:
+        match = re.search(
+            r"^(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})\s+(.+)", data)
+        dat = []
+        for i in range(1, 7, 1):
+            dat.append(match.group(i))
+        temp = match.group(7).split()
+        dat = dat + temp
+    return hea, dat
+
+
+def format_SplkDat(fields, values):
+    """
+    Parameters
+    ----------
+    Returns
+    -------
+    """
 
 
 def collect_events(helper, ew):
@@ -106,7 +199,8 @@ def collect_events(helper, ew):
                         "startDate": state,
                         "endDate": endDate_str
                     }
-                    #
+                    # Parse the data and determine whether it's a header
+                    # If it's a header parse as header else as data.
                 except Exception as e:
                     message1 = "Exception=" + str(e)
                     message2 = "ExceptionInfo=" + str(sys.exc_info())
