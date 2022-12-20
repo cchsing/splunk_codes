@@ -8,6 +8,13 @@ import re
 import traceback
 
 
+def validate_input(helper, definition):
+    """Implement your own validation logic to validate the input stanza configurations"""
+    # This example accesses the modular input variable
+    # text = definition.parameters.get('text', None)
+    pass
+
+
 def parseHostnamePort(nameList_string):
     """ Function to parse the string of hostname and port to list 
     Parameters
@@ -88,7 +95,24 @@ def isHeader(data):
     bool
         True - data is a header, False - data is metrics data. 
     """
-    pattern = "^(TRGT)"
+    pattern = "^(TRGT_HOST)"
+    return bool(re.match(pattern, data))
+
+
+def isData(hostname, data):
+    """ Function to verify the data for valid format with hostname.
+    Parameters
+    ----------
+    hostname : str
+        The component name / hostname for the eG test.
+    data : str
+        The data from the test. 
+    Returns
+    -------
+    bool
+        True - data is a valid format, False - data is not valid.
+    """
+    pattern = "^(" + hostname + ")"
     return bool(re.match(pattern, data))
 
 
@@ -215,13 +239,38 @@ def collect_events(helper, ew):
                         "startDate": state,
                         "endDate": endDate_str
                     }
-                    # HTTP Request to retrieve the test data
     # ---------------------------------------------------------------------------------
+                    # HTTP Request to retrieve the test data
                     response2 = httpReq(helper, url2, method1, body2, header1)
                     r_status2 = response2.status_code
+                    # Skip if bad response
                     if r_status2 != 200:
                         response2.raise_for_status()
-                        break
+                        continue
+                    # Extract the json data
+                    r_json2 = response2.json()
+                    # Skip if no data
+                    if len(r_json2) < 2:
+                        continue
+                    # Parse the json data to header and data in list
+                    curFields = []
+                    curValues = []
+                    for row in r_json2:
+                        fields, values = parseHeaDat(row)
+                        if len(fields) > 1:
+                            curFields = fields
+                        if len(values) > 1:
+                            curValues = values
+                        # Format the extracted header and data to fields and values
+                        if len(curFields) == len(values):
+                            output2Splk = splkData_format(fields, values)
+                            output2Splk += ",test=\"" + test + "\""
+                            # Write the event to Splunk
+                            event = helper.new_event(
+                                source=source1, index=index1, sourcetype=sourcetype1, data=output2Splk)
+                            ew.write_event(event)
+                        else:
+                            continue
     # ---------------------------------------------------------------------------------
                 except Exception as e:
                     message1 = "Exception=" + str(e)
