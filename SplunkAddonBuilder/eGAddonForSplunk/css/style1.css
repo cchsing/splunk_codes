@@ -2,17 +2,9 @@
 
 @import url("https://www.w3schools.com/w3css/4/w3.css");
 @import url("https://www.w3schools.com/lib/w3-theme-black.css");
-@import url("https://fonts.googleapis.com/css?family=Roboto");
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
-@import url("https://www.w3schools.com/lib/w3-theme-black.css")
 
-html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
-.w3-sidebar {
-  z-index: 3;
-  width: 250px;
-  top: 43px;
-  bottom: 0;
-  height: inherit;
+html,body,h1,h2,h3,h4,h5,h6 {
+  font-family: "Roboto", sans-serif;
 }
 
 @media screen and (prefers-reduced-motion: no-preference){
