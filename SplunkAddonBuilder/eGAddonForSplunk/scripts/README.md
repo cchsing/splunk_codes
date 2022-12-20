@@ -1,4 +1,6 @@
-<link href="../css/style1.css" rel="stylesheet"></link>
+<head>
+    <link href="../css/style1.css" rel="stylesheet"></link>
+</head>
 <a class="top-link hide" href="#top">↑</a>
 <a name="top"></a>
 
