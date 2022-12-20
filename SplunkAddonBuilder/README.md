@@ -1,5 +1,3 @@
-[Home](../README.md)
-
 # Splunk Add-on Builder
 
 To documents all the add-on built with the builder.
