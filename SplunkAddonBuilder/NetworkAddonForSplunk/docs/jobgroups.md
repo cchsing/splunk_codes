@@ -1,2 +1,0 @@
-# The jobgroups endpoint
-
