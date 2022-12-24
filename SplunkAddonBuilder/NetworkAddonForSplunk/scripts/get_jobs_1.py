@@ -8,9 +8,12 @@ import re
 import traceback
 import base64
 
+
 def basic_auth(username, password):
-    token = base64.b64encode(bytes(f"{username}:{password}","utf-8")).decode("ascii")
+    token = base64.b64encode(
+        bytes(f"{username}:{password}", "utf-8")).decode("ascii")
     return f'Basic {token}'
+
 
 def checkpoint(helper, initialValue):
     """ Function for creating Checkpoint using the start and end datetime %Y-%m-%d %H:%M:%S
@@ -39,11 +42,13 @@ def checkpoint(helper, initialValue):
     # helper.delete_check_point(key)
     return state, endDate_str
 
+
 def validate_input(helper, definition):
     """Implement your own validation logic to validate the input stanza configurations"""
     # This example accesses the modular input variable
     # global_account = definition.parameters.get('global_account', None)
     pass
+
 
 def collect_events(helper, ew):
     # Declare all variables for parameters
@@ -61,7 +66,8 @@ def collect_events(helper, ew):
     stanza_name = helper.get_input_stanza_names()
     input_type = helper.get_input_type()
     # ---------------------------------------------------------------------------------
-    url1 = "https://" + opt_hostname_ip_address + ":" + opt_port + "/nwrestapi/v3/global/jobs"
+    url1 = "https://" + opt_hostname_ip_address + \
+        ":" + opt_port + "/nwrestapi/v3/global/jobs"
     method1 = "GET"
     header1 = {
         "Authorization": basic_auth(username, password)
@@ -74,7 +80,8 @@ def collect_events(helper, ew):
     parameters1 = f"?{query_filter}&{field_list_filter}"
     url1 += parameters1
     # ---------------------------------------------------------------------------------
-    response1 = helper.send_http_request(url1, method1, parameters=None, payload=None, headers=header1, cookies=None, verify=False, cert=None, timeout=None, use_proxy=False)
+    response1 = helper.send_http_request(url1, method1, parameters=None, payload=None,
+                                         headers=header1, cookies=None, verify=False, cert=None, timeout=None, use_proxy=False)
     r_status1 = response1.status_code
     if r_status1 == 200:
         r_json1 = response1.json()
@@ -86,8 +93,9 @@ def collect_events(helper, ew):
             keys_list = list(job.keys())
             output = ""
             for key in keys_list:
-            # keys = job.keys()
+                # keys = job.keys()
                 output += str(key) + "=\"" + str(job[key]) + "\","
             output = output.rstrip(",")
-            event = helper.new_event(source=source1, index=index1, sourcetype=sourcetype1, data=output)
+            event = helper.new_event(host=opt_hostname_ip_address, source=source1,
+                                     index=index1, sourcetype=sourcetype1, data=output)
             ew.write_event(event)
