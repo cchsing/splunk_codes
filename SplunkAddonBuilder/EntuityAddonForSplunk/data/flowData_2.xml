@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="true"?>
+<ns2:flowHistoryResult xmlns:ns2="https://www.entuity.com/schemas/flow">
+  <sampleSet>   
+    <key>5</key>
+    <sample rate="5446.903333333334" timestamp="1507543200" volume="1634071"/>
+    <sample rate="4787.08" timestamp="1507543500" volume="1436124"/>
+  </sampleSet>      
+  <sampleSet>
+    <key>7</key>
+    <sample rate="3815.54" timestamp="1507543200" volume="1144662"/>
+    <sample rate="3208.3" timestamp="1507543500" volume="962490"/>
+  </sampleSet>
+</ns2:flowHistoryResult>
