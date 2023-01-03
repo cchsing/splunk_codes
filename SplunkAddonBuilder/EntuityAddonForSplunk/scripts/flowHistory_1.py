@@ -48,7 +48,7 @@ def collect_events(helper, ew):
     # ---------------------------------------------------------------------------------
     # HTTP Request
     response1 = helper.send_http_request(
-        url1, method1, parameters=None, payload=None, headers=header1, cookies=None, verify=False, timeout=None, use_proxy=False)
+        url1, method1, parameters=params_1, payload=None, headers=header1, cookies=None, verify=False, timeout=None, use_proxy=False)
     r_status1 = response1.status_code
     if (r_status1 != 200):
         response1.raise_for_status()
