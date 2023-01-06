@@ -4,6 +4,9 @@ import sys
 import time
 import datetime
 import json
+import re
+import traceback
+import base64
 
 
 def validate_input(helper, definition):
@@ -22,11 +25,15 @@ def collect_events(helper, ew):
 
     msg1 = "Input: " + helper.get_input_stanza_names() + "triggered."
     helper.log_info(msg1)
-
+    global_account = helper.get_arg('global_account')
+    username = global_account['username']
+    password = global_account['password']
+    password_base64 = base64.b64encode(
+        bytes(f"{password}", "utf-8")).decode("ascii")
     opt_hostname_ip_address = helper.get_arg('hostname_ip_address')
     opt_port = helper.get_arg('port')
-    opt_username = helper.get_arg('username')
-    opt_password = helper.get_arg('password')
+    # opt_username = helper.get_arg('username')
+    # opt_password = helper.get_arg('password')
     opt_type = helper.get_arg('type')
     opt_name_ = helper.get_arg('name_')
 
@@ -36,8 +43,8 @@ def collect_events(helper, ew):
     managerurl = "https://" + opt_hostname_ip_address + ":" + opt_port
     header1 = {
         "managerurl": managerurl,
-        "user": opt_username,
-        "pwd": opt_password
+        "user": username,
+        "pwd": password_base64
     }
     body1 = {
         "type": opt_type,
