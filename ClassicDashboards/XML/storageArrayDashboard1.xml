@@ -1,0 +1,92 @@
+<form theme="dark">
+  <label>Storage Array Capacity (Utilisation)</label>
+  <fieldset submitButton="true" autoRun="false">
+    <input type="time" token="filter-time">
+      <label>Time Range</label>
+      <default>
+        <earliest>-30d@d</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="filter-location">
+      <label>Location</label>
+      <fieldForLabel>Location</fieldForLabel>
+      <fieldForValue>Location</fieldForValue>
+      <search>
+        <query>index="cimb_capacity" 
+| dedup Location
+| table Location</query>
+        <earliest>$filter-time.earliest$</earliest>
+        <latest>$filter-time.latest$</latest>
+      </search>
+      <prefix>"</prefix>
+      <suffix>"</suffix>
+    </input>
+    <input type="dropdown" token="filter-asset">
+      <label>Asset</label>
+      <fieldForLabel>Asset</fieldForLabel>
+      <fieldForValue>Asset</fieldForValue>
+      <search>
+        <query>index="cimb_capacity" Location=$filter-location$  
+| dedup Asset
+| table Asset</query>
+        <earliest>$filter-time.earliest$</earliest>
+        <latest>$filter-time.latest$</latest>
+      </search>
+      <prefix>"</prefix>
+      <suffix>"</suffix>
+    </input>
+    <input type="dropdown" token="filter-disktype">
+      <label>Disk Type</label>
+      <fieldForLabel>Disk Type</fieldForLabel>
+      <fieldForValue>Disk Type</fieldForValue>
+      <search>
+        <query>index="cimb_capacity" Location=$filter-location$  Asset=$filter-asset$ 
+| dedup "Disk Type"
+| table "Disk Type"</query>
+        <earliest>$filter-time.earliest$</earliest>
+        <latest>$filter-time.latest$</latest>
+      </search>
+      <prefix>"</prefix>
+      <suffix>"</suffix>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <chart>
+        <search>
+          <query>index="cimb_capacity" Location=$filter-location$  Asset=$filter-asset$ "Disk Type"=$filter-disktype$
+| eval epochDate=strptime("01-".Month, "%d-%b-%y") 
+| eval date=strftime(epochDate, "%Y-%m-%d")
+| Table date, "Used ", "Warning ", "Ciritcal "
+| sort + date</query>
+          <earliest>$filter-time.earliest$</earliest>
+          <latest>$filter-time.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.text">Date</option>
+        <option name="charting.axisTitleY.text">Utilisation %</option>
+        <option name="charting.axisY.maximumNumber">100</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.fieldDashStyles">{"Warning ": dot, "Ciritcal ": dash}</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>index="cimb_capacity" Location="MSB"  Asset="DD6300" "Disk Type"="Active Tier"
+| eval epochDate=strptime("01-".Month, "%d-%b-%y") 
+| eval date=strftime(epochDate, "%Y-%m-%d")
+| sort - date
+| Table "Month", "Location", "Asset", "Disk Type", "Installed _GB", "Baseline _GB", "Consumed _GB", "Used ", "Free ", "Warning ", "Ciritcal "</query>
+          <earliest>$filter-time.earliest$</earliest>
+          <latest>$filter-time.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</form>

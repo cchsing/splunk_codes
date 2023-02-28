@@ -1,0 +1,87 @@
+<form theme="dark">
+  <label>Storage Array Capacity (Forecast)</label>
+  <fieldset submitButton="true" autoRun="false">
+    <input type="time" token="filter-time">
+      <label>Time Range</label>
+      <default>
+        <earliest>-30d@d</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="filter-location">
+      <label>Location</label>
+      <fieldForLabel>Location</fieldForLabel>
+      <fieldForValue>Location</fieldForValue>
+      <search>
+        <query>index="cimb_capacity" 
+| dedup Location
+| table Location</query>
+        <earliest>$filter-time.earliest$</earliest>
+        <latest>$filter-time.latest$</latest>
+      </search>
+      <prefix>"</prefix>
+      <suffix>"</suffix>
+    </input>
+    <input type="dropdown" token="filter-asset">
+      <label>Asset</label>
+      <fieldForLabel>Asset</fieldForLabel>
+      <fieldForValue>Asset</fieldForValue>
+      <search>
+        <query>index="cimb_capacity" Location=$filter-location$  
+| dedup Asset
+| table Asset</query>
+        <earliest>$filter-time.earliest$</earliest>
+        <latest>$filter-time.latest$</latest>
+      </search>
+      <prefix>"</prefix>
+      <suffix>"</suffix>
+    </input>
+    <input type="dropdown" token="filter-disktype">
+      <label>Disk Type</label>
+      <fieldForLabel>Disk Type</fieldForLabel>
+      <fieldForValue>Disk Type</fieldForValue>
+      <search>
+        <query>index="cimb_capacity" Location=$filter-location$  Asset=$filter-asset$ 
+| dedup "Disk Type"
+| table "Disk Type"</query>
+        <earliest>$filter-time.earliest$</earliest>
+        <latest>$filter-time.latest$</latest>
+      </search>
+      <prefix>"</prefix>
+      <suffix>"</suffix>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <input type="dropdown" token="futureTimespan" searchWhenChanged="true">
+        <label>Future Timespan</label>
+        <choice value="6">6 months</choice>
+        <choice value="9">9 months</choice>
+        <choice value="12">12 months</choice>
+        <default>6</default>
+        <initialValue>6</initialValue>
+      </input>
+      <chart>
+        <search>
+          <query>index="cimb_capacity" Location=$filter-location$  Asset=$filter-asset$ "Disk Type"=$filter-disktype$
+| eval epochDate=strptime("01-".Month, "%d-%b-%y"), _time=epochDate
+| rename "Used " as used, "Disk Type" as disktype
+| timechart minspan=30d sum(used) by disktype
+| predict $filter-disktype$ algorithm=LLP5 future_timespan=$futureTimespan$ as Prediction
+| appendcols [search index="cimb_capacity" Location=$filter-location$  Asset=$filter-asset$ "Disk Type"=$filter-disktype$
+| table "Ciritcal ", "Warning "
+| rename "Ciritcal ", as Critical, "Warning " as Warning]
+| filldown Critical, Warning</query>
+          <earliest>$filter-time.earliest$</earliest>
+          <latest>$filter-time.latest$</latest>
+        </search>
+        <option name="charting.axisY.maximumNumber">100</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.fieldDashStyles">{Critical: Dash, Warning: Dot}</option>
+        <option name="height">600</option>
+      </chart>
+    </panel>
+  </row>
+</form>
